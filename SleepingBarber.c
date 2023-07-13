@@ -7,6 +7,8 @@
 
 #define CLIENTI_MASSIMI 50
 
+void * cliente(void * num);
+
 sem_t stanzaAttesa;
 
 sem_t poltronaBarbiere;
@@ -29,8 +31,8 @@ int main(int argc, char * argv[]) {
     scanf("%d", & numeroSedie);
 
     if (numClienti > CLIENTI_MASSIMI) {
-    printf("IL NUMERO MASSIMO DI CLIENTI E' %d.\n", CLIENTI_MASSIMI);
-    exit(-1);
+        printf("IL NUMERO MASSIMO DI CLIENTI E' %d.\n", CLIENTI_MASSIMI);
+        exit(-1);
     }
 
   for (i = 0; i < CLIENTI_MASSIMI; i++) {
@@ -54,11 +56,27 @@ int main(int argc, char * argv[]) {
         sleep(1);
     }
 
-    tuttoFatto = 1;
+        tuttoFatto = 1;
         sem_post( & cuscinoBarbiere);
         pthread_join(btid, NULL);
+
+
     }
 
-    
+void * cliente(void * numero) {
+  int num = *(int * )numero;
+  sem_wait( & stanzaAttesa);
+  printf("CLIENTE %d : ***E' ENTRATO NELLA SALA D'ATTESA.\n", num + 1);
   
-    }
+  sem_wait( & poltronaBarbiere);
+  
+  sem_post( & stanzaAttesa);
+ 
+  printf("CLIENTE %d : ***RISVEGLIA IL BARBIERE.\n", num + 10);
+  sem_post( & cuscinoBarbiere);
+ 
+  sem_wait( & taglio);
+  
+  sem_post( & poltronaBarbiere);
+  printf("CLIENTE %d : ***LASCIA IL NEGOZIO.\n", num + 10);
+}    
