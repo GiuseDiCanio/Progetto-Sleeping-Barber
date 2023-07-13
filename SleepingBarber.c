@@ -8,6 +8,8 @@
 #define CLIENTI_MASSIMI 50
 
 void * cliente(void * num);
+void * barbiere(void * );
+void randwait(int secondi);
 
 sem_t stanzaAttesa;
 
@@ -59,8 +61,6 @@ int main(int argc, char * argv[]) {
         tuttoFatto = 1;
         sem_post( & cuscinoBarbiere);
         pthread_join(btid, NULL);
-
-
     }
 
 void * cliente(void * numero) {
@@ -72,11 +72,32 @@ void * cliente(void * numero) {
   
   sem_post( & stanzaAttesa);
  
-  printf("CLIENTE %d : ***RISVEGLIA IL BARBIERE.\n", num + 10);
+  printf("CLIENTE %d : ***RISVEGLIA IL BARBIERE.\n", num + 1);
   sem_post( & cuscinoBarbiere);
  
   sem_wait( & taglio);
   
   sem_post( & poltronaBarbiere);
-  printf("CLIENTE %d : ***LASCIA IL NEGOZIO.\n", num + 10);
-}    
+  printf("CLIENTE %d : ***LASCIA IL NEGOZIO.\n", num + 1);
+}
+
+void * barbiere(void * junk) {
+  while (!tuttoFatto) {
+    printf("BARBIERE : ***DORME...\n");
+    sem_wait( & cuscinoBarbiere);
+    if (!tuttoFatto) {
+      printf("BARBIERE : ***STA TAGLIANDO I CAPELLI\n");
+      randwait(2);
+      printf("BARBIERE : ***HA FINITO DI TAGLIARE I CAPELLI\n");
+      sem_post( & taglio);
+    } else {
+      printf("BARBIERE : ***PUO' ANDARE A CASA PER OGGI.\n");
+    }
+  }
+}
+
+void randwait(int secondi) {
+  int len;
+  len = (int)((1 * secondi) + 1);
+  sleep(len);
+}
