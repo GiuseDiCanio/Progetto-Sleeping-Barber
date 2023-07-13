@@ -3,8 +3,17 @@
 #include <time.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <semaphore.h> 
 
 #define CLIENTI_MASSIMI 50
+
+sem_t stanzaAttesa;
+
+sem_t poltronaBarbiere;
+
+sem_t cuscinoBarbiere;
+
+sem_t taglio;
 
 int tuttoFatto = 0;
 
@@ -28,7 +37,12 @@ int main(int argc, char * argv[]) {
     Numero[i] = i;
   }
 
-    pthread_create( & btid, NULL, barbiere, NUL)
+  sem_init( & stanzaAttesa, 0, numeroSedie);
+  sem_init( & poltronaBarbiere, 0, 1);
+  sem_init( & cuscinoBarbiere, 0, 0);
+  sem_init( & taglio, 0, 0);
+
+    pthread_create( & btid, NULL, barbiere, NULL);
 
     for (i = 0; i < numClienti; i++) {
         pthread_create( & tid[i], NULL, cliente, (void * ) & Numero[i]);
