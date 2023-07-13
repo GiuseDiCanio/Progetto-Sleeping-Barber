@@ -6,6 +6,7 @@
 
 #define CLIENTI_MASSIMI 50
 
+int tuttoFatto = 0;
 
 int main(int argc, char * argv[]) {
     pthread_t btid;
@@ -13,7 +14,6 @@ int main(int argc, char * argv[]) {
     int i, numClienti, numeroSedie;
     int Numero[CLIENTI_MASSIMI];
     
-
     printf("INSERISCI IL NUMERO DI CLIENTI(Max 50) : ");
     scanf("%d", & numClienti);
     printf("INSERISCI IL NUMERO DELLE SEDIE: ");
@@ -27,5 +27,12 @@ int main(int argc, char * argv[]) {
   for (i = 0; i < CLIENTI_MASSIMI; i++) {
     Numero[i] = i;
   }
+
+    pthread_create( & btid, NULL, barbiere, NUL)
+
+    for (i = 0; i < numClienti; i++) {
+        pthread_create( & tid[i], NULL, cliente, (void * ) & Numero[i]);
+        sleep(1);
+      }
   
 }
