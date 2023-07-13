@@ -31,11 +31,11 @@ int main(int argc, char * argv[]) {
     if (numClienti > CLIENTI_MASSIMI) {
     printf("IL NUMERO MASSIMO DI CLIENTI E' %d.\n", CLIENTI_MASSIMI);
     exit(-1);
-  }
+    }
 
   for (i = 0; i < CLIENTI_MASSIMI; i++) {
     Numero[i] = i;
-  }
+    }
 
   sem_init( & stanzaAttesa, 0, numeroSedie);
   sem_init( & poltronaBarbiere, 0, 1);
@@ -47,6 +47,18 @@ int main(int argc, char * argv[]) {
     for (i = 0; i < numClienti; i++) {
         pthread_create( & tid[i], NULL, cliente, (void * ) & Numero[i]);
         sleep(1);
-      }
+    }
+
+    for (i = 0; i < numClienti; i++) {
+        pthread_join(tid[i], NULL);
+        sleep(1);
+    }
+
+    tuttoFatto = 1;
+        sem_post( & cuscinoBarbiere);
+        pthread_join(btid, NULL);
+    }
+
+    
   
-}
+    }
