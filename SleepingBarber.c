@@ -45,6 +45,12 @@ int main(int argc, char * argv[]) {
   sem_init( & poltronaBarbiere, 0, 1);
   sem_init( & cuscinoBarbiere, 0, 0);
   sem_init( & taglio, 0, 0);
+  //situazione di stallo non forzato
+  /*
+  sem_init( & poltronaBarbiere, 0, 0);
+  sem_init( & cuscinoBarbiere, 0, 1);
+  sem_init( & taglio, 0, 1);
+  */
 
     pthread_create( & btid, NULL, barbiere, NULL);
 
